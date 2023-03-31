@@ -24,6 +24,7 @@ function App() {
     setError(null);
     try {
       const response = await fetch(
+        
         "https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json"
       );
       if (!response.ok) {
@@ -58,6 +59,7 @@ function App() {
   // }
 
   async function addMovieHandler(movie) {
+    
     const repsonse = await fetch(
       "https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
       {
@@ -96,16 +98,7 @@ function App() {
 
       setEditMovie(movie);
 
-    // const repsonse = await fetch(`https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies/${movie.id}.json`, {
-    //   method: 'PUT',
-    //   body: JSON.stringify(movie),
-    //   headers: {
-    //     'Content-type' : 'application/json'
-    //   }
-    // });
-    // const data = await repsonse.json();
 
-    // fetchMoviesHandler()
   }
 
 
@@ -174,13 +167,11 @@ const showModalHandler = () => {
    async function submitHandler(event) {
     event.preventDefault();
 
-    if(editMovie.title.trim().length === 0 || editMovie.openingText.trim().length === 0 || editMovie.releaseDate.value.trim().length === 0) {
+    if(editMovie.title.trim().length === 0 || editMovie.openingText.trim().length === 0 || editMovie.releaseDate.trim().length === 0) {
       alert('fill in all fields')
       return;
-    }
-
-    
-    await saveMovieHandler();
+    } else {
+      await saveMovieHandler();
 
     setEditMovie({
       title: "",
@@ -188,6 +179,10 @@ const showModalHandler = () => {
       releaseDate: "",
       id: "",
     }, setShowModal(false))
+    }
+
+    
+    
   }
   
 
