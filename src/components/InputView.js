@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+
 import classes from "./AddMovie.module.css";
 
 const InputView = (props) => {

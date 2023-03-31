@@ -1,15 +1,13 @@
 import React, { Fragment, useRef, useState } from 'react';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import classes from './AddMovie.module.css';
 import ErrorModal from './ErrorModal';
-import InputView from './InputView';
+
 
 function AddMovie(props) {
 
   const titleRef = useRef('');
   const openingTextRef = useRef('');
   const releaseDateRef = useRef('');
-  const imgRef = useRef('');
 
   const [error, setError] = useState();
 

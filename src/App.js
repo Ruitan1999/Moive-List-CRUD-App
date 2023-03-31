@@ -4,7 +4,6 @@ import MoviesList from "./components/MoviesList";
 import AddMovie from "./components/AddMovie";
 import Edit from "./components/Edit";
 import "./App.css";
-import EditModal from "./components/EditModal";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -18,13 +17,11 @@ function App() {
     id: "",
   });
 
-  
   const fetchMoviesHandler = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
       const response = await fetch(
-        
         "https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json"
       );
       if (!response.ok) {
@@ -59,8 +56,7 @@ function App() {
   // }
 
   async function addMovieHandler(movie) {
-    
-    const repsonse = await fetch(
+    await fetch(
       "https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies.json",
       {
         method: "POST",
@@ -70,14 +66,14 @@ function App() {
         },
       }
     );
-    const data = await repsonse.json();
+
 
     fetchMoviesHandler();
   }
 
   async function removeMovieHandler(movie) {
     // console.log(movie);
-    const repsonse = await fetch(
+    await fetch(
       `https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies/${movie}.json`,
       {
         method: "DELETE",
@@ -87,47 +83,38 @@ function App() {
         },
       }
     );
-    const data = await repsonse.json();
+   
 
     fetchMoviesHandler();
   }
 
-  
-
   async function EditMovieHandler(movie) {
-
-      setEditMovie(movie);
-
-
+    setEditMovie(movie);
   }
 
-
   async function saveMovieHandler() {
-    
+     await fetch(
+      `https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies/${editMovie.id}.json`,
+      {
+        method: "PUT",
+        body: JSON.stringify(editMovie),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    );
+   
 
-  const repsonse = await fetch(`https://reactproject-78ba1-default-rtdb.asia-southeast1.firebasedatabase.app/movies/${editMovie.id}.json`, {
-    method: 'PUT',
-    body: JSON.stringify(editMovie),
-    headers: {
-      'Content-type' : 'application/json'
-    }
-  });
-  const data = await repsonse.json();
+    fetchMoviesHandler();
+  }
 
-  fetchMoviesHandler()
-}
+  const hideModalHandler = () => {
+    setShowModal(false);
+  };
 
-
-const hideModalHandler = () => {
-  setShowModal(false)
-}
-
-const showModalHandler = () => {
-  setShowModal(true)
-}
-
-
-
+  const showModalHandler = () => {
+    setShowModal(true);
+  };
 
   let content = <p>Found no movies.</p>;
 
@@ -151,43 +138,38 @@ const showModalHandler = () => {
   }
 
   const valueChangeHandler = (event) => {
-
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setEditMovie({
       ...editMovie,
       [name]: value,
-
- 
-      
     });
-    
-   }
- 
+  };
 
-   async function submitHandler(event) {
+  async function submitHandler(event) {
     event.preventDefault();
 
-    if(editMovie.title.trim().length === 0 || editMovie.openingText.trim().length === 0 || editMovie.releaseDate.trim().length === 0) {
-      alert('fill in all fields')
+    if (
+      editMovie.title.trim().length === 0 ||
+      editMovie.openingText.trim().length === 0 ||
+      editMovie.releaseDate.trim().length === 0
+    ) {
+      alert("fill in all fields");
       return;
     } else {
       await saveMovieHandler();
 
-    setEditMovie({
-      title: "",
-      openingText: "",
-      releaseDate: "",
-      id: "",
-    }, setShowModal(false))
+      setEditMovie(
+        {
+          title: "",
+          openingText: "",
+          releaseDate: "",
+          id: "",
+        },
+        setShowModal(false)
+      );
     }
-
-    
-    
   }
-  
 
-
-  
   return (
     <React.Fragment>
       <section>
@@ -197,9 +179,16 @@ const showModalHandler = () => {
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
-      {showModal && <section>
-        <Edit editMovie={editMovie} onChange={valueChangeHandler} onSub={submitHandler} onHide={hideModalHandler} ></Edit>
-      </section> }
+      {showModal && (
+        <section>
+          <Edit
+            editMovie={editMovie}
+            onChange={valueChangeHandler}
+            onSub={submitHandler}
+            onHide={hideModalHandler}
+          ></Edit>
+        </section>
+      )}
       <section>{content}</section>
     </React.Fragment>
   );

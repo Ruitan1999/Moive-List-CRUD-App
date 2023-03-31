@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment } from "react";
 import classes from "./AddMovie.module.css";
 
 function Edit(props) {
